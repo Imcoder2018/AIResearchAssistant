@@ -1,0 +1,23 @@
+{
+  "name": "ai-research-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.2.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "zustand": "^5.0.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "@types/react": "^18.2.44",
+    "@types/react-dom": "^18.2.17",
+    "typescript": "^5.4.2"
+  }
+}
