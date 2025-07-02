@@ -10,3 +10,212 @@ A monorepo project using pnpm workspaces for an AI Research Assistant applicatio
 1. Install pnpm: `npm install -g pnpm`
 2. Install dependencies: `pnpm install`
 3. Follow instructions in each app directory for running the applications.
+
+# AI Research Assistant: Frontend (Next.js)
+
+Made completely with Windsurf AI
+
+---
+
+## 📚 Project Overview
+
+This is the frontend component of the AI Research Assistant application, built with Next.js using TypeScript and Tailwind CSS. It provides an interactive chat interface for users to interact with the AI assistant and manage research documents. It lives in a monorepo alongside a FastAPI backend, ensuring seamless integration.
+
+---
+
+## ✨ Features
+
+- Scalable Component Structure  
+  - Organized into `src/components/ui`, `src/components/layout`, and `src/features/chat` for reusable UI elements and feature-specific code.  
+  - Key components:  
+    - **Button.tsx**: A reusable UI button with customizable styles.  
+    - **ChatWindow.tsx**: Main chat interface, managing conversation state and layout.  
+    - **MessageList.tsx**: Displays conversation history with auto-scrolling.  
+    - **ChatInput.tsx**: User input area with send button and keyboard submission support.  
+
+- Zustand for State Management  
+  Utilizes a lightweight store (`src/stores/chatStore.ts`) to manage chat state, including the messages array, threadId, loading status, and real-time update actions.
+
+- Client Components  
+  Marks interactive pieces (ChatWindow, MessageList, ChatInput) as Client Components to ensure correct React behavior under Next.js’s App Router.
+
+- Streaming API Client  
+  - `src/lib/api.ts` exports an asynchronous `sendChatMessage` function.  
+  - Sends POST requests to the FastAPI backend, handles streaming responses via `ReadableStream` and `TextDecoder`, and updates the Zustand store token by token.
+
+- Dynamic Backend Connectivity  
+  Reads the backend URL from the `NEXT_PUBLIC_API_URL` environment variable for flexible deployment and local development.
+
+---
+
+## 🛠️ Technologies Used
+
+- Next.js 14.2.3 (App Router)  
+- React  
+- TypeScript  
+- Tailwind CSS  
+- Zustand (state management)  
+- pnpm (monorepo and package management)
+
+---
+
+## ⚙️ Setup and Installation (Local Development)
+
+1. Clone the monorepo  
+   ```bash
+   git clone <your-repo-url>
+   ```
+2. Navigate to the frontend directory  
+   ```bash
+   cd apps/web
+   ```
+3. Create a `.env.local` file and set your backend URL  
+   ```
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+   ```
+4. Install dependencies  
+   ```bash
+   pnpm install
+   ```
+5. Run the development server  
+   ```bash
+   pnpm dev
+   ```
+6. Open your browser at the URL shown in the terminal (e.g., `http://localhost:3000`).
+
+---
+
+## 🚀 Deployment
+
+The frontend is deployed on Vercel.  
+Frontend URL: https://ainextfastapi-ddsm2j1iz-imcoder2018s-projects.vercel.app/
+
+---
+
+## Acknowledgements
+
+This project was made completely with Windsurf AI, showcasing its strengths in full-stack development—from project scaffolding and environment setup to frontend/backend integration, testing, and Dockerization.
+
+
+------------------------------------------------------
+
+
+# AI Research Assistant: Backend (FastAPI)
+
+Made completely with Windsurf AI
+
+---
+
+## 📚 Project Overview
+
+This is the backend component of the AI Research Assistant application, built with FastAPI to deliver a robust and asynchronous API for managing AI-powered research workflows. It resides in a monorepo alongside the Next.js frontend, enabling consistent development and deployment practices.
+
+---
+
+## ✨ Features
+
+- Modular Project Structure  
+  - Organized into `src/api/v1`, `src/core`, `src/schemas`, and `src/services` for clarity and scalability.
+
+- Pydantic Schemas  
+  - Handles data validation and serialization with `ChatRequest` (for chat messages) and `DocumentStatus` (for processing feedback).
+
+- OpenAI Service Integration  
+  - Manages interactions with the OpenAI API for chat threads, messages, runs, and streaming completions.  
+  - Migrated from Assistants v1 to the stable Chat Completions API to avoid deprecation.
+
+- Document Processing Service  
+  - Uploads and reads PDFs asynchronously using `pypdf` wrapped in `asyncio.to_thread`.  
+  - Splits extracted text into chunks, generates OpenAI embeddings, and upserts into a Pinecone index.
+
+- API Routers  
+  - **POST /upload**: Ingests documents via `process_pdf_and_upsert`.  
+  - **POST /**: Orchestrates chat loops, thread management, message handling, and streams AI responses.
+
+- AI Agent Tooling  
+  - Defines function-calling tools like `search_scientific_papers` (Pinecone query) and `search_arxiv` (ArXiv Python library).
+
+- Containerization  
+  - Fully Dockerized for consistent, portable deployments.
+
+---
+
+## 🛠️ Technologies Used
+
+- Python 3.11  
+- FastAPI  
+- uvicorn (ASGI server)  
+- Pydantic (data validation)  
+- OpenAI Python SDK  
+- Pinecone Client  
+- pypdf  
+- langchain (text splitting)  
+- arxiv (Python library)  
+- httpx (HTTP client)  
+- pytest & pytest-asyncio (integration testing)  
+- Docker  
+- pnpm (monorepo management)
+
+---
+
+## ⚙️ Setup and Installation (Local Development)
+
+1. Clone the monorepo  
+   ```bash
+   git clone <your-repo-url>
+   ```
+
+2. Navigate to the backend directory  
+   ```bash
+   cd apps/api
+   ```
+
+3. Create and populate the `.env` file (or copy from `.env.example`) with your API keys.
+
+4. Docker Setup  
+   - Install Docker Desktop for your OS.  
+   - Build the Docker image:  
+     ```bash
+     docker build -t ai-research-backend .
+     ```  
+   - Run the container:  
+     ```bash
+     docker run -d \
+       --name ai-backend \
+       -p 8001:8000 \
+       --env-file .env \
+       -v $(pwd)/src:/app/src \
+       ai-research-backend
+     ```
+
+5. Verify the backend  
+   - Open Swagger UI at `http://localhost:8001/docs`.  
+   - Confirm `/v1/` (chat) and `/v1/upload` (documents) endpoints appear.  
+   - Test the chat endpoint to ensure a response like `{"content":"Hello! How can I assist you today?"}`.
+
+---
+
+## 🧪 Integration Testing
+
+The backend includes integration tests using pytest and pytest-asyncio.
+
+1. Install testing dependencies (outside Docker):  
+   ```bash
+   pip install pytest pytest-asyncio httpx
+   ```
+
+2. Run the tests:  
+   ```bash
+   pytest
+   ```
+
+3. These tests mock external services (Pinecone, ArXiv) to simulate full chat and document workflows, validating API logic end to end.
+
+---
+
+## 🚀 Deployment
+
+This backend is optimized for Docker-based deployment.  
+
+Backend URL (Vercel): https://ainextfastapibackend-f73o9zd42-imcoder2018s-projects.vercel.app/docs
+
