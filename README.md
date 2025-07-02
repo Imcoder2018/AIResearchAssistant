@@ -29,6 +29,7 @@ Our NotebookLM notebook captures the hands-on process and learnings in real time
 Explore the detailed walkthrough:  
 https://notebooklm.google.com/notebook/f8ceca39-b692-4fc1-8e6e-84c6f31522f8
 
+
 ---
 
 ## 🎉 Highlights
@@ -39,6 +40,17 @@ https://notebooklm.google.com/notebook/f8ceca39-b692-4fc1-8e6e-84c6f31522f8
 - **Interactive NotebookLM**: Live record of experiments and solutions 🖥️  
 
 ---
+
+## 🎙️ Project Podcast
+
+Dive into our quick podcast episode straight from NotebookLM, where we unpack the core ideas, challenges, and breakthroughs of this AI-driven project in under 5 minutes! Tune in for an engaging talk on:
+
+- ⚙️ The genesis of the project idea with Gemini Deep Research  
+- 🏄‍♂️ How Windsurf AI powered every development step  
+- 📝 Real-time NotebookLM insights—prompts, hurdles, and “aha” moments  
+
+👉 Listen now: https://notebooklm.google.com/notebook/f8ceca39-b692-4fc1-8e6e-84c6f31522f8/audio
+
 
 Thank you for exploring this AI-driven project blueprint! 🌟
 
